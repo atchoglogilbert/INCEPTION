@@ -1,9 +1,9 @@
 # Inception
 
-[ ] MariaDB setup
-[ ] users
-[ ] WordPress setup
+- [ ] MariaDB setup
+- [ ] users
+- [ ] WordPress setup
 
-[ ] volumes
-[ ] domain name
-[ ] network
+- [ ] volumes
+- [ ] domain name
+- [ ] network
