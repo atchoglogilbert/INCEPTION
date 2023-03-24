@@ -1,0 +1,42 @@
+version: "1.0"
+# links
+# ports
+
+services:
+  # nginx:
+  #   build: ./requirements/nginx
+  #   container_name: nginx
+  #   networks: [ docker-network ]
+  #   env_file: .env
+  #   # depends_on:
+  #   #   - wordpress
+  #   image: app/nginx
+  #   ports: [ 80:80, 443:443 ]
+
+  wordpress:
+    build:
+      context: /requirements/wordpress
+    image: katchogl/wordpress:1.0
+    container_name: wordpress_container
+    depends_on: [ mariadb ]
+    volumes: [ /var/lib/docker/volumes/wordpressv ]
+    networks: [ docker-network ]
+    ports: [ 9000:9000 ]
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+      args:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    image: katchogl/mariadb:1.0
+    container_name: mariadb_container
+    volumes: [ /var/lib/docker/volumes/wordpressdbv ]
+    networks: [ docker-network ]
+    ports: [ 3306:3306 ]
+
+networks:
+  docker-network:
+
+volumes:
+  wordpressv: {}
+  wordpressdbv: {}
