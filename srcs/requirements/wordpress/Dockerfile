@@ -43,12 +43,10 @@ RUN curl -O https://wordpress.org/latest.tar.gz && \
 # copy custom configs
 WORKDIR /var/www/html/wordpress
 COPY www.conf /etc/php/7.4/fpm/pool.d/
-COPY php.ini /etc/php/7.4/fpm/
 
 # rm sample
 RUN  rm -f wp-config-sample.php
 
-# RUN		mkdir /run/php && touch /run/php/php7.4-fpm.sock
 RUN		mkdir /run/php && touch /run/php/php7.4-fpm.pid && \
 		mkdir /var/log/php-fpm/ && touch /var/log/php-fpm/access.log && \
 		chown www-data:www-data /var/log/php-fpm/access.log

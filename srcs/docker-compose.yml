@@ -7,8 +7,7 @@ services:
     image: katchogl/nginx:1.0
     container_name: nginx
     depends_on: [ wordpress ]
-    volumes:
-      - wordpressv:/var/www/html/wordpress:ro
+    volumes: [ wordpressv:/var/www/html/wordpress:ro ]
     networks: [ docker-network ]
     ports: [ 443:443 ]
     restart: unless-stopped
@@ -24,9 +23,7 @@ services:
     image: katchogl/wordpress:1.0
     container_name: wordpress
     depends_on: [ mariadb ]
-    volumes: 
-      - wordpressv:/var/www/html/wordpress
-      - mysql-wordpressv:/var/lib/mysql/wordpress
+    volumes: [ wordpressv:/var/www/html/wordpress ]
     networks: [ docker-network ]
     restart: unless-stopped
    
@@ -40,8 +37,7 @@ services:
         WORDPRESS_DB: ${WORDPRESS_DB}
     image: katchogl/mariadb:1.0
     container_name: mariadb
-    volumes:
-      - mysql-wordpressv:/var/lib/mysql/wordpress
+    volumes: [ mysql-wordpressv:/var/lib/mysql/wordpress ]
     networks: [ docker-network ]
     restart: unless-stopped
 
