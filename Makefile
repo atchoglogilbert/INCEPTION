@@ -18,10 +18,22 @@ re: stop fclean all
 reset: stop prune all
 
 ls:
+	@echo "\001\033[36;1m\002/> Images \001\033[0m\002"
 	sudo docker images -a
-	@echo " "
+	@echo
+
+	@echo "\001\033[36;1m\002/> Networks \001\033[0m\002"
+	sudo docker network ls
+	@echo
+
+	@echo "\001\033[36;1m\002/> Containers \001\033[0m\002"
 	sudo docker ps -a
-	@echo " "
+	@echo
+
+	@echo "\001\033[36;1m\002/> Volumes \001\033[0m\002"
 	sudo docker volume ls
 
-.PHONY: all up stop fclean re ls
+.PHONY: all up stop prune fclean re reset ls
+
+# docker inspect <container_name>
+# docker network inspect <container_name>

@@ -1,13 +1,23 @@
 FROM	debian:10.13
 
-RUN		apt update -y
-RUN		apt install -y nginx
+WORKDIR /etc/nginx/
 
-ADD		conf/nginx.conf /etc/nginx/nginx.conf
-ADD		conf/cert.crt /etc/ssl/cert.crt
-ADD		conf/key.key /etc/ssl/key.key
+# install utility
+RUN		apt update -y && \
+			apt install -y nano && \
+			rm -rf /var/lib/apt/lists/*
 
-EXPOSE	80
+# install packages
+RUN		apt update -y && \
+			apt install -y nginx && \
+			rm -rf /var/lib/apt/lists/*
+
+COPY		nginx.conf .
+COPY		cert.crt /etc/ssl/
+COPY		key.key /etc/ssl/
+
+RUN		echo 'fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;' >> /etc/nginx/fastcgi_params
+
 EXPOSE	443
 
 CMD 	["nginx", "-g", "daemon off;"]

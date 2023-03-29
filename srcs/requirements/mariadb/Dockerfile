@@ -2,14 +2,29 @@ FROM	debian:10.13
 
 WORKDIR	/etc/mysql
 
-RUN		apt update -y && \
-			apt install -y mariadb-server
-
 ARG		MYSQL_ROOT_PASSWORD
+ARG		WORDPRESS_ADMIN
+ARG		WORDPRESS_ADMIN_PASSWORD
+ARG		WORDPRESS_DB
 
-COPY	init.sh .
+# install utility
+RUN		apt update -y && \
+			apt install -y nano && \
+			rm -rf /var/lib/apt/lists/*
 
-RUN		service mysql start && bash ./init.sh
+# install required packages
+RUN		apt update -y && \
+			apt install -y mariadb-server && \ 
+			rm -rf /var/lib/apt/lists/*
+
+# copy confs
+COPY	50-server.cnf ./mariadb.conf.d/
+
+# secure installation and wpdb setup
+COPY	mysql_secure_installation.sh .
+RUN		service mysql start && \
+		bash ./mysql_secure_installation.sh && \
+		rm -f ./mysql_secure_installation.sh
 
 EXPOSE	3306
 

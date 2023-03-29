@@ -1,42 +1,54 @@
 version: "1.0"
-# links
-# ports
 
 services:
-  # nginx:
-  #   build: ./requirements/nginx
-  #   container_name: nginx
-  #   networks: [ docker-network ]
-  #   env_file: .env
-  #   # depends_on:
-  #   #   - wordpress
-  #   image: app/nginx
-  #   ports: [ 80:80, 443:443 ]
+  nginx:
+    build:
+      context: ./requirements/nginx
+    image: katchogl/nginx:1.0
+    container_name: nginx
+    depends_on: [ wordpress ]
+    volumes:
+      - wordpressv:/var/www/html/wordpress:ro
+    networks: [ docker-network ]
+    ports: [ 443:443 ]
+    restart: unless-stopped
 
   wordpress:
     build:
-      context: /requirements/wordpress
+      context: ./requirements/wordpress
+      args:
+        WORDPRESS_ADMIN: ${WORDPRESS_ADMIN}
+        WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+        WORDPRESS_DB: ${WORDPRESS_DB}
+        WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
     image: katchogl/wordpress:1.0
-    container_name: wordpress_container
+    container_name: wordpress
     depends_on: [ mariadb ]
-    volumes: [ /var/lib/docker/volumes/wordpressv ]
+    volumes: 
+      - wordpressv:/var/www/html/wordpress
+      - mysql-wordpressv:/var/lib/mysql/wordpress
     networks: [ docker-network ]
-    ports: [ 9000:9000 ]
-
+    restart: unless-stopped
+   
   mariadb:
     build:
       context: ./requirements/mariadb
       args:
         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        WORDPRESS_ADMIN: ${WORDPRESS_ADMIN}
+        WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+        WORDPRESS_DB: ${WORDPRESS_DB}
     image: katchogl/mariadb:1.0
-    container_name: mariadb_container
-    volumes: [ /var/lib/docker/volumes/wordpressdbv ]
+    container_name: mariadb
+    volumes:
+      - mysql-wordpressv:/var/lib/mysql/wordpress:ro
     networks: [ docker-network ]
-    ports: [ 3306:3306 ]
+    restart: unless-stopped
 
 networks:
   docker-network:
+    driver: bridge
 
 volumes:
   wordpressv: {}
-  wordpressdbv: {}
+  mysql-wordpressv: {}
