@@ -41,7 +41,7 @@ services:
     image: katchogl/mariadb:1.0
     container_name: mariadb
     volumes:
-      - mysql-wordpressv:/var/lib/mysql/wordpress:ro
+      - mysql-wordpressv:/var/lib/mysql/wordpress
     networks: [ docker-network ]
     restart: unless-stopped
 

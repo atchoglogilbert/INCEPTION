@@ -45,8 +45,6 @@ WORKDIR /var/www/html/wordpress
 COPY www.conf /etc/php/7.4/fpm/pool.d/
 COPY php.ini /etc/php/7.4/fpm/
 
-COPY wp-config.php .
-
 # rm sample
 RUN  rm -f wp-config-sample.php
 
@@ -59,6 +57,11 @@ RUN		mkdir /run/php && touch /run/php/php7.4-fpm.pid && \
 RUN		apt update -y && \
 			apt install -y nano net-tools && \
 			rm -rf /var/lib/apt/lists/*
+
+COPY 	wp_init.sh .
+
+RUN		bash ./wp_init.sh && \
+		rm -f ./wp_init.sh
 
 EXPOSE 9000
 
