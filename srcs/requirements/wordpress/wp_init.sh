@@ -23,5 +23,3 @@ echo "<?php
 			define( 'ABSPATH', __DIR__ . '/' );
 	}
 	require_once ABSPATH . 'wp-settings.php';" > wp-config.php;
-
-chown www-data:www-data wp-config.php;

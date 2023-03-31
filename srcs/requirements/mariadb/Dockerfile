@@ -24,7 +24,7 @@ RUN		service mysql start && \
 		bash ./mysql_secure_installation.sh && \
 		rm -f ./mysql_secure_installation.sh
 
-RUN		rm -rf /var/lib/apt/lists/*	
+RUN		rm -rf /var/lib/apt/lists/*
 
 EXPOSE	3306
 

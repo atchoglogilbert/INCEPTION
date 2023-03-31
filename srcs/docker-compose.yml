@@ -8,7 +8,6 @@ services:
     container_name: nginx
     depends_on: [ wordpress ]
     volumes: [ wordpressv:/var/www/html/wordpress:ro ]
-    # volumes: [ wordpressv:/var/www/html/wordpress:ro, nginxv:/etc/nginx ]
     networks: [ docker-network ]
     ports: [ 443:443 ]
     restart: unless-stopped
@@ -24,7 +23,6 @@ services:
     image: katchogl/wordpress:1.0
     container_name: wordpress
     depends_on: [ mariadb ]
-    # depends_on: [ mariadb, adminer ]
     volumes: [ wordpressv:/var/www/html/wordpress ]
     networks: [ docker-network ]
     restart: unless-stopped
@@ -43,32 +41,21 @@ services:
     networks: [ docker-network ]
     restart: unless-stopped
 
-  redis:
-    build:
-      context: ./requirements/redis
-    image: katchogl/redis:1.0
-    container_name: redis
-    depends_on: [ wordpress ]
-    volumes: [ wordpressv:/var/www/html/wordpress ]
-    networks: [ docker-network ]
-    restart: unless-stopped
-    environment:
-      WP_REDIS_PASSWORD: ${WP_REDIS_PASSWORD}
-
-  # adminer:
-  #   build:
-  #     context: ./requiremnets/adminer
-  #   image: katchogl/adminer:1.0
-  #   container_name: adminer
-  #   volumes: [ nginxv:/etc/nginx ]
-  #   networks: [ docker-network ]
-  #   restart: unless-stopped
-
 networks:
   docker-network:
     driver: bridge
 
 volumes:
-  wordpressv: {}
-  mysql-wordpressv: {}
-  # nginxv: {}
+  wordpressv:
+    driver: local
+    driver_opts:
+     type: none
+     device: /home/katchogl/data/wordpressv
+     o: bind
+
+  mysql-wordpressv:
+    driver: local
+    driver_opts:
+     type: none
+     device: /home/katchogl/data/mysql-wordpressv
+     o: bind
