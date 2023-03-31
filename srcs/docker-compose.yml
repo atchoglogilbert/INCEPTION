@@ -4,7 +4,7 @@ services:
   nginx:
     build:
       context: ./requirements/nginx
-    image: katchogl/nginx:1.0
+    image: nginx
     container_name: nginx
     depends_on: [ wordpress ]
     volumes: [ wordpressv:/var/www/html/wordpress:ro ]
@@ -20,7 +20,7 @@ services:
         WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
         WORDPRESS_DB: ${WORDPRESS_DB}
         WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-    image: katchogl/wordpress:1.0
+    image: wordpress
     container_name: wordpress
     depends_on: [ mariadb ]
     volumes: [ wordpressv:/var/www/html/wordpress ]
@@ -35,7 +35,7 @@ services:
         WORDPRESS_ADMIN: ${WORDPRESS_ADMIN}
         WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
         WORDPRESS_DB: ${WORDPRESS_DB}
-    image: katchogl/mariadb:1.0
+    image: mariadb
     container_name: mariadb
     volumes: [ mysql-wordpressv:/var/lib/mysql/wordpress ]
     networks: [ docker-network ]
@@ -47,15 +47,14 @@ networks:
 
 volumes:
   wordpressv:
-    driver: local
-    driver_opts:
-     type: none
-     device: /home/katchogl/data/wordpressv
-     o: bind
-
+      driver: local
+      driver_opts:
+        type: none
+        o: bind
+        device: /home/$USER/data/wordpressv
   mysql-wordpressv:
-    driver: local
-    driver_opts:
-     type: none
-     device: /home/katchogl/data/mysql-wordpressv
-     o: bind
+      driver: local
+      driver_opts:
+        type: none
+        o: bind
+        device: /home/$USER/data/mysql-wordpressv
