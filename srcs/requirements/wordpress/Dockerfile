@@ -7,7 +7,7 @@ ARG		WORDPRESS_ADMIN_PASSWORD
 ARG		WORDPRESS_DB
 ARG		WORDPRESS_DB_HOST
 
-# install required packages
+# install dependencies
 RUN apt update && \
     apt install -y \
     curl \
@@ -16,8 +16,7 @@ RUN apt update && \
     libpng-dev \
     libjpeg-dev \
     libzip-dev \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
+    unzip
 
 # install PHP
 RUN curl -fsSL https://packages.sury.org/php/apt.gpg | apt-key add - && \
@@ -31,8 +30,7 @@ RUN curl -fsSL https://packages.sury.org/php/apt.gpg | apt-key add - && \
     php7.4-gd \
     php7.4-xml \
     php7.4-mbstring \
-    php7.4-zip \
-    && rm -rf /var/lib/apt/lists/*
+    php7.4-zip
 
 # download and extract WordPress
 RUN curl -O https://wordpress.org/latest.tar.gz && \
@@ -53,13 +51,14 @@ RUN		mkdir /run/php && touch /run/php/php7.4-fpm.pid && \
 
 # install utility
 RUN		apt update -y && \
-			apt install -y nano net-tools && \
-			rm -rf /var/lib/apt/lists/*
+			apt install -y nano
 
 COPY 	wp_init.sh .
 
 RUN		bash ./wp_init.sh && \
 		rm -f ./wp_init.sh
+
+RUN		rm -rf /var/lib/apt/lists/*	
 
 EXPOSE 9000
 

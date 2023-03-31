@@ -4,8 +4,7 @@ WORKDIR /etc/nginx/
 
 # install packages
 RUN		apt update -y && \
-			apt install -y nginx openssl && \
-			rm -rf /var/lib/apt/lists/*
+			apt install -y nginx openssl
 
 # generate ssl private key and cert
 RUN		openssl req -newkey rsa:2048 -nodes -keyout /etc/ssl/key.key -x509 -days 365 -out /etc/ssl/cert.crt -subj \
@@ -15,8 +14,9 @@ COPY	nginx.conf .
 
 # install utility
 RUN		apt update -y && \
-			apt install -y nano && \
-			rm -rf /var/lib/apt/lists/*
+			apt install -y nano
+
+RUN		rm -rf /var/lib/apt/lists/*	
 
 EXPOSE	443
 

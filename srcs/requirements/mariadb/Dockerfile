@@ -9,13 +9,11 @@ ARG		WORDPRESS_DB
 
 # install utility
 RUN		apt update -y && \
-			apt install -y nano && \
-			rm -rf /var/lib/apt/lists/*
-
+			apt install -y nano
+			
 # install required packages
 RUN		apt update -y && \
-			apt install -y mariadb-server && \ 
-			rm -rf /var/lib/apt/lists/*
+			apt install -y mariadb-server
 
 # copy confs
 COPY	50-server.cnf ./mariadb.conf.d/
@@ -25,6 +23,8 @@ COPY	mysql_secure_installation.sh .
 RUN		service mysql start && \
 		bash ./mysql_secure_installation.sh && \
 		rm -f ./mysql_secure_installation.sh
+
+RUN		rm -rf /var/lib/apt/lists/*	
 
 EXPOSE	3306
 

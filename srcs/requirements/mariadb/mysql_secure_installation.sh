@@ -12,6 +12,7 @@ mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "DELETE FROM mysql.user WHERE User='ro
 mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "DROP DATABASE IF EXISTS test;";
 
 # setup wordpress
+
 ## create default wpdb if not exists
 mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${WORDPRESS_DB} DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
 ## create wpdb user and 
@@ -19,6 +20,7 @@ mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "GRANT ALL ON ${WORDPRESS_DB}.* TO \
 	'${WORDPRESS_ADMIN}'@'%' IDENTIFIED BY '${WORDPRESS_ADMIN_PASSWORD}';";
 
 # reload privileges table
+
 mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "FLUSH PRIVILEGES;";
 
 
