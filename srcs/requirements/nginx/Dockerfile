@@ -20,4 +20,4 @@ RUN		rm -rf /var/lib/apt/lists/*
 
 EXPOSE	443
 
-ENTRYPOINT	["nginx", "-g", "daemon off;"]
+ENTRYPOINT	[ "nginx", "-g", "daemon off;" ]

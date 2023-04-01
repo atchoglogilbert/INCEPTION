@@ -1,15 +1,6 @@
 FROM debian:10.13
 
-WORKDIR /var/www/html
-
-# ARG		WORDPRESS_ADMIN
-# ARG		WORDPRESS_ADMIN_PASSWORD
-# ARG		WORDPRESS_DB
-# ARG		WORDPRESS_DB_HOST
-
-# ARG 	WEBSITE_URL
-# ARG 	WEBSITE_TITLE
-# ARG 	WEBSITE_ADMIN_EMAIL
+WORKDIR /var/www/html/
 
 # install PHP installation dependencies
 RUN apt update && \
@@ -61,8 +52,10 @@ RUN	apt update -y && \
 RUN	 rm -rf /var/lib/apt/lists/*	
 
 COPY ./tools/run.sh .
+# COPY ./tools/test.sh .
 
 EXPOSE 9000
 
 # Start PHP-FPM
-ENTRYPOINT ["bash", "run.sh"]
+ENTRYPOINT [ "bash", "./run.sh" ]
+# ENTRYPOINT [ "bash", "./test.sh" ]

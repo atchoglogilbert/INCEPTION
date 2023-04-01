@@ -13,20 +13,19 @@ RUN		apt update -y && \
 			
 # install required packages
 RUN		apt update -y && \
-			apt install -y mariadb-server
+			apt install -y mariadb-server && \
+		        mysql_install_db --datadir=/var/lib/mysql;
 
 # copy confs
-COPY	./conf/50-server.cnf ./mariadb.conf.d/
+COPY ./conf/50-server.cnf ./mariadb.conf.d/
 
 # secure installation and wpdb setup
 COPY	./tools/mysql_secure_installation.sh .
 
 RUN		service mysql start && \
-		bash ./mysql_secure_installation.sh && \
-		rm -f ./mysql_secure_installation.sh
-
-COPY ./tools/run.sh .
-
+			bash ./mysql_secure_installation.sh && \
+			rm -f ./mysql_secure_installation.sh
+		
 EXPOSE	3306
 
-ENTRYPOINT [ "bash", "run.sh" ]
+ENTRYPOINT [ "mysqld", "--user=mysql" ]

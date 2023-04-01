@@ -7,7 +7,7 @@ services:
     image: nginx
     container_name: nginx
     depends_on: [ wordpress ]
-    volumes: [ wordpressv:/var/www/html/wordpress:ro ]
+    volumes: [ wordpressv:/var/www/html:ro ]
     networks: [ docker-network ]
     ports: [ 443:443 ]
     restart: unless-stopped
@@ -18,7 +18,7 @@ services:
     image: wordpress
     container_name: wordpress
     depends_on: [ mariadb ]
-    volumes: [ wordpressv:/var/www/html/wordpress ]
+    volumes: [ wordpressv:/var/www/html ]
     networks: [ docker-network ]
     restart: unless-stopped
     environment:
