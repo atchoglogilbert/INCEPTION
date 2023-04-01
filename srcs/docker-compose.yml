@@ -4,7 +4,7 @@ services:
   nginx:
     build:
       context: ./requirements/nginx
-    image: nginx
+    image: nginx:1.0
     container_name: nginx
     depends_on: [ wordpress ]
     volumes: [ wordpressv:/var/www/html:ro ]
@@ -15,7 +15,7 @@ services:
   wordpress:
     build:
       context: ./requirements/wordpress
-    image: wordpress
+    image: wordpress:1.0
     container_name: wordpress
     depends_on: [ mariadb ]
     volumes: [ wordpressv:/var/www/html ]
@@ -40,7 +40,7 @@ services:
         WORDPRESS_ADMIN: ${WORDPRESS_ADMIN}
         WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
         WORDPRESS_DB: ${WORDPRESS_DB}
-    image: mariadb
+    image: mariadb:1.0
     container_name: mariadb
     volumes: [ mysql-wordpressv:/var/lib/mysql ]
     networks: [ docker-network ]
