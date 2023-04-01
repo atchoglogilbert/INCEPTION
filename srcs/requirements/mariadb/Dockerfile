@@ -7,7 +7,7 @@ ARG		WORDPRESS_ADMIN
 ARG		WORDPRESS_ADMIN_PASSWORD
 ARG		WORDPRESS_DB
 
-# install utility
+# install debug utility
 RUN		apt update -y && \
 			apt install -y nano
 			
@@ -16,16 +16,17 @@ RUN		apt update -y && \
 			apt install -y mariadb-server
 
 # copy confs
-COPY	50-server.cnf ./mariadb.conf.d/
+COPY	./conf/50-server.cnf ./mariadb.conf.d/
 
 # secure installation and wpdb setup
-COPY	mysql_secure_installation.sh .
+COPY	./tools/mysql_secure_installation.sh .
+
 RUN		service mysql start && \
 		bash ./mysql_secure_installation.sh && \
 		rm -f ./mysql_secure_installation.sh
 
-RUN		rm -rf /var/lib/apt/lists/*
+COPY ./tools/run.sh .
 
 EXPOSE	3306
 
-ENTRYPOINT	["mysqld_safe", "-user=mysql"]
+ENTRYPOINT [ "bash", "run.sh" ]

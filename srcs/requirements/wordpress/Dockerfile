@@ -2,12 +2,16 @@ FROM debian:10.13
 
 WORKDIR /var/www/html
 
-ARG		WORDPRESS_ADMIN
-ARG		WORDPRESS_ADMIN_PASSWORD
-ARG		WORDPRESS_DB
-ARG		WORDPRESS_DB_HOST
+# ARG		WORDPRESS_ADMIN
+# ARG		WORDPRESS_ADMIN_PASSWORD
+# ARG		WORDPRESS_DB
+# ARG		WORDPRESS_DB_HOST
 
-# install dependencies
+# ARG 	WEBSITE_URL
+# ARG 	WEBSITE_TITLE
+# ARG 	WEBSITE_ADMIN_EMAIL
+
+# install PHP installation dependencies
 RUN apt update && \
     apt install -y \
     curl \
@@ -32,35 +36,33 @@ RUN curl -fsSL https://packages.sury.org/php/apt.gpg | apt-key add - && \
     php7.4-mbstring \
     php7.4-zip
 
-# download and extract WordPress
-RUN curl -O https://wordpress.org/latest.tar.gz && \
-    tar -zxvf latest.tar.gz && \
-    rm latest.tar.gz && \
-	chown -R www-data:www-data /var/www/html/wordpress
+RUN	mkdir /run/php && touch /run/php/php7.4-fpm.pid && \
+	mkdir /var/log/php-fpm/ && touch /var/log/php-fpm/access.log && \
+	chown www-data:www-data /var/log/php-fpm/access.log
 
-# copy custom configs
-WORKDIR /var/www/html/wordpress
-COPY www.conf /etc/php/7.4/fpm/pool.d/
+COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/
 
-# rm sample
-RUN  rm -f wp-config-sample.php
+# install MariaDB client
+RUN apt update && \
+    apt install -y mariadb-client
 
-RUN		mkdir /run/php && touch /run/php/php7.4-fpm.pid && \
-		mkdir /var/log/php-fpm/ && touch /var/log/php-fpm/access.log && \
-		chown www-data:www-data /var/log/php-fpm/access.log
+COPY ./conf/50-client.cnf /etc/mysql/mariadb.conf.d/
 
-# install utility
-RUN		apt update -y && \
-			apt install -y nano
+# download and install wordpress cli
+RUN apt update && \
+	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+	mv wp-cli.phar /bin/wp && \
+	chmod +x /bin/wp
 
-COPY 	wp_init.sh .
+# install debug utility
+RUN	apt update -y && \
+		apt install -y nano
 
-RUN		bash ./wp_init.sh && \
-		rm -f ./wp_init.sh
+RUN	 rm -rf /var/lib/apt/lists/*	
 
-RUN		rm -rf /var/lib/apt/lists/*	
+COPY ./tools/run.sh .
 
 EXPOSE 9000
 
 # Start PHP-FPM
-CMD ["php-fpm7.4", "-F"]
+ENTRYPOINT ["bash", "run.sh"]

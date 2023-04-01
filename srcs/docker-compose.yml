@@ -15,17 +15,22 @@ services:
   wordpress:
     build:
       context: ./requirements/wordpress
-      args:
-        WORDPRESS_ADMIN: ${WORDPRESS_ADMIN}
-        WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
-        WORDPRESS_DB: ${WORDPRESS_DB}
-        WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
     image: wordpress
     container_name: wordpress
     depends_on: [ mariadb ]
     volumes: [ wordpressv:/var/www/html/wordpress ]
     networks: [ docker-network ]
     restart: unless-stopped
+    environment:
+      WORDPRESS_ADMIN: ${WORDPRESS_ADMIN}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+      WORDPRESS_DB: ${WORDPRESS_DB}
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_HOST_NO_PORT: ${WORDPRESS_DB_HOST_NO_PORT}
+      WEBSITE_URL: ${WEBSITE_URL}
+      WEBSITE_USER: ${WEBSITE_USER}
+      WEBSITE_TITLE: ${WEBSITE_TITLE}
+      WEBSITE_ADMIN_EMAIL: ${WEBSITE_ADMIN_EMAIL}
    
   mariadb:
     build:
@@ -37,7 +42,7 @@ services:
         WORDPRESS_DB: ${WORDPRESS_DB}
     image: mariadb
     container_name: mariadb
-    volumes: [ mysql-wordpressv:/var/lib/mysql/wordpress ]
+    volumes: [ mysql-wordpressv:/var/lib/mysql ]
     networks: [ docker-network ]
     restart: unless-stopped
 
