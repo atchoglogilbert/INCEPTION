@@ -52,10 +52,8 @@ RUN	apt update -y && \
 RUN	 rm -rf /var/lib/apt/lists/*	
 
 COPY ./tools/run.sh .
-# COPY ./tools/test.sh .
 
 EXPOSE 9000
 
 # Start PHP-FPM
 ENTRYPOINT [ "bash", "./run.sh" ]
-# ENTRYPOINT [ "bash", "./test.sh" ]

@@ -20,5 +20,3 @@ mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "GRANT ALL ON ${WORDPRESS_DB}.* TO \
 
 # reload privileges table
 mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "FLUSH PRIVILEGES;";
-
-# mysql -u root -pborntocodeKA42 -e "SELECT user FROM mysql.user;";
