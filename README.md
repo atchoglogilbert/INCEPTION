@@ -1,6 +1,6 @@
 # Inception
 
-- ## Overview
+## Overview
 
 - Develop a LEMP application with Docker and self-made
 Debian-based Dockerfiles;
