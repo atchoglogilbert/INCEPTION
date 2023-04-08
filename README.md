@@ -42,12 +42,11 @@ make purge ;
 Display the logs of a container:
 
 ```
-docker logs <container_name>
+docker logs <container_name> ;
 ```
-
-or remove the '-d' flag in Makefile rule 'make up'
+or remove the '-d' flag in Makefile rule 'make up'.
 
 ssh into a running container:
 ```
-docker exec -it <container_name> bash
+docker exec -it <container_name> bash ; 
 ```
