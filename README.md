@@ -47,7 +47,7 @@ docker logs <container_name>
 
 or remove the '-d' flag in Makefile rule 'make up'
 
-ssh into a running container
+ssh into a running container:
 ```
 docker exec -it <container_name> bash
 ```
